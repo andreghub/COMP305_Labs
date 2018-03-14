@@ -28,10 +28,10 @@ public class PlayerControllerLab4 : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
-		if(isGrounded && Input.GetAxis("Jump") > 0)
+		if(isGrounded && Input.GetAxis("Jump") > 0 && rBody.velocity.y == 0.0f)
         {
             animator.SetBool("Ground", false);
-            rBody.AddForce(new Vector2(0, jumpForce));
+            rBody.AddForce(new Vector2(0, jumpForce), ForceMode2D.Impulse);
             isGrounded = false;
         }
 	}
