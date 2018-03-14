@@ -8,7 +8,10 @@ public class CameraFollowWithBuffer : MonoBehaviour
     public Transform playerPosition;
     public Transform safeZoneLeftLimit;
     public Transform safeZoneRightLimit;
-    public Transform region2Limit;
+    public bool gameOver = false;
+    public Transform gameOverText;
+    public Transform playerWinsText;
+    private Vector3 velocity = Vector3.zero;
 
 
     // Use this for initialization
@@ -16,13 +19,12 @@ public class CameraFollowWithBuffer : MonoBehaviour
     {
         safeZoneLeftLimit = transform.GetChild(0);
         safeZoneRightLimit = transform.GetChild(1);
-        region2Limit = transform.GetChild(2);
     }
 
     // Update is called once per framet\
     void Update()
     {
-        if (playerPosition.position.x > region2Limit.position.x)
+        if (!gameOver)
         {
             if (playerPosition.position.x > safeZoneRightLimit.position.x)
             {
@@ -35,6 +37,28 @@ public class CameraFollowWithBuffer : MonoBehaviour
         }
     }
 
+    public void GameOver()
+    {
+        gameOver = true;
+        gameOverText.GetComponent<SpriteRenderer>().enabled = true;
+        //this.transform.position = Vector3.Lerp(this.transform.position, , 0.2f);
+        this.transform.position = Vector3.Lerp(transform.position, new Vector3(gameOverText.position.x + 15, gameOverText.position.y + 10, transform.position.z), 0.5f);
+        this.GetComponent<Camera>().orthographicSize = 13;
+        //this.transform.position = new Vector3(gameOverText.position.x, gameOverText.position.y, transform.position.z);
+        playerPosition.GetComponent<PlayerMovement>().enabled = false;
+    }
+
+    public void PlayerWins()
+    {
+        gameOver = true;
+        playerWinsText.GetComponent<SpriteRenderer>().enabled = true;
+        //this.transform.position = Vector3.Lerp(this.transform.position, , 0.2f);
+        this.transform.position = Vector3.Lerp(transform.position, new Vector3(playerWinsText.position.x - 20, playerWinsText.position.y + 10, transform.position.z), 0.5f);
+        this.GetComponent<Camera>().orthographicSize = 13;
+        //this.transform.position = new Vector3(gameOverText.position.x, gameOverText.position.y, transform.position.z);
+        playerPosition.GetComponent<PlayerMovement>().enabled = false;
+    }
+
     // Predefined Unity function for drawing Gizmos in the editor
     void OnDrawGizmosSelected()
     {
@@ -44,7 +68,5 @@ public class CameraFollowWithBuffer : MonoBehaviour
         Gizmos.DrawLine(safeZoneLeftLimit.position, new Vector3(safeZoneLeftLimit.position.x, safeZoneLeftLimit.position.y + 100, safeZoneLeftLimit.position.z));
         Gizmos.DrawLine(safeZoneLeftLimit.position, new Vector3(safeZoneLeftLimit.position.x, safeZoneLeftLimit.position.y - 100, safeZoneLeftLimit.position.z));
         Gizmos.color = Color.red;
-        Gizmos.DrawLine(region2Limit.position, new Vector3(region2Limit.position.x, region2Limit.position.y + 100, region2Limit.position.z));
-        Gizmos.DrawLine(region2Limit.position, new Vector3(region2Limit.position.x, region2Limit.position.y - 100, region2Limit.position.z));
     }
 }

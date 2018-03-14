@@ -13,8 +13,7 @@ public class CameraCloseUpTrigger : MonoBehaviour {
         // If the other object is a player, then do something
         if(other.gameObject.tag == "Player")
         {
-            mainCamera.enabled = false;
-            closeUpCamera.enabled = true;
+            mainCamera.GetComponent<CameraFollowWithBuffer>().PlayerWins();
         }
     }
 
